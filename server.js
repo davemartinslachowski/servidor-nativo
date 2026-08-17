@@ -1,15 +1,13 @@
-const http = require('node:http')
+const http = require('node:http');
+const porta = 3000;
 
-const server = http.createServer();
-
-const port = 3000;
-
-server.on('request', (req, res) => {
-    console.log(`Requisição recebida! Método ${req.method} e Rota: ${req.route}`);
-    res.writeHead(200, {"Content-Type": "text/plain; charset=utf-8"});
-    res.end("Servidor HTTP nativo Funcionando!");
+const server = http.createServer((req, res) => {
+  console.log(`Requisição recebida! ${req.method} ${req.url}`);
+  res.statusCode = 201;
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.end('Recurso criado');
 });
 
-server.listen(port, () => {
-    console.log(`Servidor escutando na porta ${port}`);
+server.listen(porta, () => {
+  console.log(`Servidor ouvindo na porta ${porta}`);
 });
