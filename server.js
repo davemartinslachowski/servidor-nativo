@@ -13,3 +13,6 @@ const server = http.createServer((req, res) => {
 server.listen(porta, () => {
     console.log(`Servidor ouvindo na porta ${porta}`);
 });
+
+
+// 4) => O navegador iria ficar carregando indefinidamente e não vai receber uma resposta completa.
