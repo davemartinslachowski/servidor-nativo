@@ -1,107 +1,55 @@
 import http from 'node:http'
 const porta = 3000
-const tarefas = [
-
-
-
- { id: 1, nome: "Lavar louças" },
- { id: 2, nome: "Comprar uma RTX 5090" }
-import http from 'node:http'
-
-
-const porta = 3000
-
 
 const tarefas = [
- { id: 1, nome: "Lavar louças" },
- { id: 2, nome: "Comprar uma RTX 5090" }
+    { id: 1, nome: "Lavar louças" },
+    { id: 2, nome: "Comprar uma RTX 5090" }
 ]
 
-
-
 const server = http.createServer((requisicao, resposta) => {
- resposta.setHeader('content-type', 'application/json');
- if (requisicao.method == 'GET' && requisicao.url == '/tarefas') {
- respostas.statusCode = 200;
- resposta.end(JSON.stringify(tarefas));
- } else if (requisicao.method == 'POST' && requisicao.url == '/tarefa') {
- let body = ''
+    resposta.setHeader('content-type', 'application/json');
+    if (requisicao.method == 'GET' && requisicao.url == '/tarefas') {
+        respostas.statusCode = 200;
+        resposta.end(JSON.stringify(tarefas));
+    } else if (requisicao.method == 'POST' && requisicao.url == '/tarefa') {
+        let body = ''
 
- requisicao.on('data', () => {
- body += chunk.toString();
- });
+        requisicao.on('data', () => {
+            body += chunk.toString();
+        });
 
- requisicao.on('end', () => {
- try {
- const novaTarefa = JSON.parse(body)
- if (!novaTarefa.nome) {
- resposta.statusCode = 400
- resposta.end(JSON.stringify({ error: "O campo 'nome' é obrigatório." }))
- }
- const tarefaCriada = {
- id: tarefas.lenght + 1,
- nome: novaTarefa.titulo
- }
+        requisicao.on('end', () => {
+            try {
+                const novaTarefa = JSON.parse(body)
+                if (!novaTarefa.nome) {
+                    resposta.statusCode = 400
+                    resposta.end(JSON.stringify({ error: "O campo 'nome' é obrigatório." }))
+                }
+                const tarefaCriada = {
+                    id: tarefas.lenght + 1,
+                    nome: novaTarefa.titulo
+                }
 
- tarefas.push(tarefaCriada)
+                tarefas.push(tarefaCriada)
 
- 
- resposta.statusCode = 201;
- resposta.end(JSON.stringify(tarefaCriada));
- } catch (error) {
- resposta.statusCode = 400;
- resposta.end(JSON.stringify({ error: 'Formato JSON inválido!' }))
- }
- });
- } else {
- resposta.statusCode = 404
- resposta.end(JSON.stringify({ error: 'Rota não encontrada.' }))
- }
-}); 
+                resposta.statusCode = 201;
+                resposta.end(JSON.stringify(tarefaCriada));
+            } catch (error) {
+                resposta.statusCode = 400;
+                resposta.end(JSON.stringify({ error: 'Formato JSON inválido!' }))
+            }
+
+        })
+    }
+    else if (requisicao.method == "GET" && urlObj.pathname == "/tarefas/busca") {
+        const nome = urlObj.searchParams.get('nome')
+    }
+    else {
+        resposta.statusCode = 404
+        resposta.end(JSON.stringify({ error: 'Rota não encontrada.' }))
+    }
+});
 
 server.listen(porta, () => {
- console.log(`Servidor funcionando na porta ${porta}`)
-}
-
-const server = http.createServer((requisicao, resposta) => {
- resposta.setHeader('content-type', 'application/json');
- if (requisicao.method == 'GET' && requisicao.url == '/tarefas') {
- respostas.statusCode = 200;
- resposta.end(JSON.stringify(tarefas));
- } else if (requisicao.method == 'POST' && requisicao.url == '/tarefa') {
- let body = ''
-
- requisicao.on('data', () => {
- body += chunk.toString();
- });
-
- requisicao.on('end', () => {
- try {
- const novaTarefa = JSON.parse(body)
- if (!novaTarefa.nome) {
- resposta.statusCode = 400
- resposta.end(JSON.stringify({ error: "O campo 'nome' é obrigatório." }))
- }
- const tarefaCriada = {
- id: tarefas.lenght + 1,
- nome: novaTarefa.titulo
- }
-
- tarefas.push(tarefaCriada)
-
- resposta.statusCode = 201;
- resposta.end(JSON.stringify(tarefaCriada));
- } catch (error) {
- resposta.statusCode = 400;
- resposta.end(JSON.stringify({ error: 'Formato JSON inválido!' }))
- }
- });
- } else {
- resposta.statusCode = 404
- resposta.end(JSON.stringify({ error: 'Rota não encontrada.' }))
- }
-}); 
-
-server.listen(porta, () => {
- console.log(`Servidor funcionando na porta ${porta}`)
+    console.log(`Servidor funcionando na porta ${porta}`)
 })
