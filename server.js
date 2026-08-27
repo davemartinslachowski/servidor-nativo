@@ -1,18 +1,107 @@
-const http = require('node:http');
-const porta = 3000;
+import http from 'node:http'
+const porta = 3000
+const tarefas = [
 
-const server = http.createServer((req, res) => {
-    console.log(`Requisição recebida! ${req.method} ${req.url}`);
-    console.log(`Data e hora: ${new Date().toISOString()}`);
 
-    res.statusCode = 201;
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ status: "ok" }));
-});
+
+ { id: 1, nome: "Lavar louças" },
+ { id: 2, nome: "Comprar uma RTX 5090" }
+import http from 'node:http'
+
+
+const porta = 3000
+
+
+const tarefas = [
+ { id: 1, nome: "Lavar louças" },
+ { id: 2, nome: "Comprar uma RTX 5090" }
+]
+
+
+
+const server = http.createServer((requisicao, resposta) => {
+ resposta.setHeader('content-type', 'application/json');
+ if (requisicao.method == 'GET' && requisicao.url == '/tarefas') {
+ respostas.statusCode = 200;
+ resposta.end(JSON.stringify(tarefas));
+ } else if (requisicao.method == 'POST' && requisicao.url == '/tarefa') {
+ let body = ''
+
+ requisicao.on('data', () => {
+ body += chunk.toString();
+ });
+
+ requisicao.on('end', () => {
+ try {
+ const novaTarefa = JSON.parse(body)
+ if (!novaTarefa.nome) {
+ resposta.statusCode = 400
+ resposta.end(JSON.stringify({ error: "O campo 'nome' é obrigatório." }))
+ }
+ const tarefaCriada = {
+ id: tarefas.lenght + 1,
+ nome: novaTarefa.titulo
+ }
+
+ tarefas.push(tarefaCriada)
+
+ 
+ resposta.statusCode = 201;
+ resposta.end(JSON.stringify(tarefaCriada));
+ } catch (error) {
+ resposta.statusCode = 400;
+ resposta.end(JSON.stringify({ error: 'Formato JSON inválido!' }))
+ }
+ });
+ } else {
+ resposta.statusCode = 404
+ resposta.end(JSON.stringify({ error: 'Rota não encontrada.' }))
+ }
+}); 
 
 server.listen(porta, () => {
-    console.log(`Servidor ouvindo na porta ${porta}`);
-});
+ console.log(`Servidor funcionando na porta ${porta}`)
+}
 
+const server = http.createServer((requisicao, resposta) => {
+ resposta.setHeader('content-type', 'application/json');
+ if (requisicao.method == 'GET' && requisicao.url == '/tarefas') {
+ respostas.statusCode = 200;
+ resposta.end(JSON.stringify(tarefas));
+ } else if (requisicao.method == 'POST' && requisicao.url == '/tarefa') {
+ let body = ''
 
-// 4) => O navegador iria ficar carregando indefinidamente e não vai receber uma resposta completa.
+ requisicao.on('data', () => {
+ body += chunk.toString();
+ });
+
+ requisicao.on('end', () => {
+ try {
+ const novaTarefa = JSON.parse(body)
+ if (!novaTarefa.nome) {
+ resposta.statusCode = 400
+ resposta.end(JSON.stringify({ error: "O campo 'nome' é obrigatório." }))
+ }
+ const tarefaCriada = {
+ id: tarefas.lenght + 1,
+ nome: novaTarefa.titulo
+ }
+
+ tarefas.push(tarefaCriada)
+
+ resposta.statusCode = 201;
+ resposta.end(JSON.stringify(tarefaCriada));
+ } catch (error) {
+ resposta.statusCode = 400;
+ resposta.end(JSON.stringify({ error: 'Formato JSON inválido!' }))
+ }
+ });
+ } else {
+ resposta.statusCode = 404
+ resposta.end(JSON.stringify({ error: 'Rota não encontrada.' }))
+ }
+}); 
+
+server.listen(porta, () => {
+ console.log(`Servidor funcionando na porta ${porta}`)
+})
